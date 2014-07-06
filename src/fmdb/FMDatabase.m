@@ -548,6 +548,9 @@ static int FMDBDatabaseBusyHandler(void *f, int count) {
         else
             sqlite3_bind_double(pStmt, idx, [obj timeIntervalSince1970]);
     }
+    else if ([obj isKindOfClass:[NSDecimalNumber class]]) {
+        sqlite3_bind_text(pStmt, idx, [[(NSDecimalNumber*)obj stringValue] UTF8String], -1, SQLITE_STATIC);
+    }
     else if ([obj isKindOfClass:[NSNumber class]]) {
         
         if (strcmp([obj objCType], @encode(BOOL)) == 0) {
