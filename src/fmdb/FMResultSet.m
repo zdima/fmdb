@@ -245,6 +245,31 @@
     return sqlite3_column_double([_statement statement], columnIdx);
 }
 
+- (NSDecimal)decimalForColumn:(NSString*)columnName {
+	return [self decimalColumnIndex:[self columnIndexForName:columnName]];
+}
+
+- (NSDecimal)decimalColumnIndex:(int)columnIdx
+{
+	NSDecimal  value;
+	if (sqlite3_column_type([_statement statement], columnIdx) == SQLITE_NULL || (columnIdx < 0)) {
+		memset( &value, 0, sizeof(value));
+		return value;
+	}
+	
+	const char *c = (const char *)sqlite3_column_text([_statement statement], columnIdx);
+	
+	if (!c) {
+		// null row.
+		memset( &value, 0, sizeof(value));
+		return value;
+	}
+
+	NSDecimalNumber* dn = [NSDecimalNumber decimalNumberWithString:[NSString stringWithUTF8String:c]];
+	return [dn decimalValue];
+}
+
+
 - (NSString*)stringForColumnIndex:(int)columnIdx {
     
     if (sqlite3_column_type([_statement statement], columnIdx) == SQLITE_NULL || (columnIdx < 0)) {

@@ -233,6 +233,9 @@
 
 - (double)doubleForColumnIndex:(int)columnIdx;
 
+- (NSDecimal)decimalForColumn:(NSString*)columnName;
+- (NSDecimal)decimalColumnIndex:(int)columnIdx;
+
 /** Result set `NSString` value for column.
 
  @param columnName `NSString` value of the name of the column.
