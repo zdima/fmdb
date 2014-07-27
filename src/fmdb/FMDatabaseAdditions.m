@@ -10,6 +10,8 @@
 #import "FMDatabaseAdditions.h"
 #import "TargetConditionals.h"
 
+#import "DecimalUtils.h"
+
 @interface FMDatabase (PrivateStuff)
 - (FMResultSet *)executeQuery:(NSString *)sql withArgumentsInArray:(NSArray*)arrayArgs orDictionary:(NSDictionary *)dictionaryArgs orVAList:(va_list)args;
 @end
@@ -54,6 +56,34 @@ return ret;
 
 - (NSDate*)dateForQuery:(NSString*)query, ... {
     RETURN_RESULT_FOR_QUERY_WITH_SELECTOR(NSDate *, dateForColumnIndex);
+}
+
+- (NSDecimal)decimalForQuery:(NSString*)query, ... {
+	va_list args;
+	va_start(args, query);
+	FMResultSet *resultSet = [self executeQuery:query withArgumentsInArray:0x00 orDictionary:0x00 orVAList:args];
+	va_end(args);
+	if (![resultSet next]) {
+		return decimalZero;
+	}
+	NSDecimal ret = [resultSet decimalColumnIndex:0];
+	[resultSet close];
+	[resultSet setParentDB:nil];
+	return ret;
+}
+
+- (NSDecimalNumber*)decimalNumberForQuery:(NSString*)query, ... {
+	va_list args;
+	va_start(args, query);
+	FMResultSet *resultSet = [self executeQuery:query withArgumentsInArray:0x00 orDictionary:0x00 orVAList:args];
+	va_end(args);
+	if (![resultSet next]) {
+		return [NSDecimalNumber zero];
+	}
+	NSDecimalNumber* ret = [resultSet decimalNumberColumnIndex:0];
+	[resultSet close];
+	[resultSet setParentDB:nil];
+	return ret;
 }
 
 

@@ -93,6 +93,23 @@
 
 - (NSDate*)dateForQuery:(NSString*)query, ...;
 
+/** Return `NSDecimal` value for query
+ 
+ @param query The SQL query to be performed.
+ @param ... A list of parameters that will be bound to the `?` placeholders in the SQL query.
+ 
+ @return `NSDecimal` value.
+ */
+- (NSDecimal)decimalForQuery:(NSString*)query, ...;
+
+/** Return `NSDecimalNumber` value for query
+ 
+ @param query The SQL query to be performed.
+ @param ... A list of parameters that will be bound to the `?` placeholders in the SQL query.
+ 
+ @return `NSDecimalNumber` value.
+ */
+- (NSDecimalNumber*)decimalNumberForQuery:(NSString*)query, ...;
 
 // Notice that there's no dataNoCopyForQuery:.
 // That would be a bad idea, because we close out the result set, and then what
