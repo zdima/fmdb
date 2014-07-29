@@ -10,8 +10,6 @@
 #import "FMDatabaseAdditions.h"
 #import "TargetConditionals.h"
 
-#import "DecimalUtils.h"
-
 @interface FMDatabase (PrivateStuff)
 - (FMResultSet *)executeQuery:(NSString *)sql withArgumentsInArray:(NSArray*)arrayArgs orDictionary:(NSDictionary *)dictionaryArgs orVAList:(va_list)args;
 @end
@@ -64,7 +62,8 @@ return ret;
 	FMResultSet *resultSet = [self executeQuery:query withArgumentsInArray:0x00 orDictionary:0x00 orVAList:args];
 	va_end(args);
 	if (![resultSet next]) {
-		return decimalZero;
+        NSDecimal zero = {0, 0, NO, YES, 0, {0}};
+		return zero;
 	}
 	NSDecimal ret = [resultSet decimalColumnIndex:0];
 	[resultSet close];
